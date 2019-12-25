@@ -19,7 +19,7 @@ cluster_ids_x, cluster_centers = kmeans(
 )
 ```
 
-see `example.ipynb` for more elaborate example
+see [`example.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/master/example.ipynb) for more elaborate example
 
 # Requirements
 * [PyTorch](http://pytorch.org/) version >= 1.0.0
