@@ -6,7 +6,7 @@ PyTorch implementation of kmeans for utilizing GPU
 
 import torch
 import numpy as np
-from kmeans_pytorch import kmeans, kmeans_predict
+from kmeans_pytorch import kmeans
 
 # data
 data_size, dims, num_clusters = 1000, 2, 3
