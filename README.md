@@ -29,7 +29,7 @@ see `example.ipynb` for more elaborate example
 
 install with `pip`:
 ```
-pip install fairseq
+pip install kmeans-pytorch
 ```
 
 **Installing from source**
