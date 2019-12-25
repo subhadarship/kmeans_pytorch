@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.py
+kmeans_pytorch/__init__.py
+kmeans_pytorch/main.py
+kmeans_pytorch.egg-info/PKG-INFO
+kmeans_pytorch.egg-info/SOURCES.txt
+kmeans_pytorch.egg-info/dependency_links.txt
+kmeans_pytorch.egg-info/entry_points.txt
+kmeans_pytorch.egg-info/not-zip-safe
+kmeans_pytorch.egg-info/top_level.txt
