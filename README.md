@@ -1,7 +1,7 @@
 # K Means using PyTorch
 PyTorch implementation of kmeans for utilizing GPU
 
-# Getting started
+# Getting Started
 ```
 
 import torch
