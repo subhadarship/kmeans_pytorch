@@ -1,6 +1,5 @@
 ---
 layout: default
-title: kmeans_pytorch
 ---
 
 # K Means using PyTorch
