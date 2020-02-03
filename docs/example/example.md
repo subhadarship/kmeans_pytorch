@@ -157,7 +157,7 @@ plt.show()
 ```
 
 
-![png]({{ site.baseurl }}/docs/static/img/example/output_10_0.png)
+![png]({{ site.baseurl }}/static/img/example/output_10_0.png)
 
 
 
