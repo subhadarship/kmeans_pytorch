@@ -1,8 +1,8 @@
 ---
 layout: default
+title: K Means using PyTorch
 ---
 
-# K Means using PyTorch
 PyTorch implementation of kmeans for utilizing GPU
 
 # Getting Started
