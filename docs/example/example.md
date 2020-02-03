@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ```python
 !pip install kmeans-pytorch
 ```
