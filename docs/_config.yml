@@ -4,7 +4,7 @@ permalink:           pretty
 title:               'JekyllBook'
 #tagline:             'A Jekyll theme'
 url:                 https://subhadarship.github.io/kmeans_pytorch/
-baseurl:             '/kmeans_pytorch'
+baseurl:             '/docs'
 
 # About/contact
 author:
