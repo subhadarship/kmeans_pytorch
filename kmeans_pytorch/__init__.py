@@ -4,6 +4,12 @@ from tqdm import tqdm
 
 
 def initialize(X, num_clusters):
+    """
+    initialize cluster centers
+    :param X: (torch.tensor) matrix
+    :param num_clusters: (int) number of clusters
+    :return: (np.array) initial state
+    """
     num_samples = len(X)
     indices = np.random.choice(num_samples, num_clusters, replace=False)
     initial_state = X[indices]
@@ -17,6 +23,15 @@ def kmeans(
         tol=1e-4,
         device=torch.device('cpu')
 ):
+    """
+    perform kmeans
+    :param X: (torch.tensor) matrix
+    :param num_clusters: (int) number of clusters
+    :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
+    :param tol: (float) threshold [default: 0.0001]
+    :param device: (torch.device) device [default: cpu]
+    :return: (torch.tensor, torch.tensor) cluster ids, cluster centers
+    """
     print(f'running k-means on {device}..')
 
     if distance == 'euclidean':
@@ -77,6 +92,14 @@ def kmeans_predict(
         distance='euclidean',
         device=torch.device('cpu')
 ):
+    """
+    predict using cluster centers
+    :param X: (torch.tensor) matrix
+    :param cluster_centers: (torch.tensor) cluster centers
+    :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
+    :param device: (torch.device) device [default: 'cpu']
+    :return: (torch.tensor) cluster ids
+    """
     print(f'predicting on {device}..')
 
     if distance == 'euclidean':
@@ -133,3 +156,4 @@ def pairwise_cosine(data1, data2, device=torch.device('cpu')):
     # return N*N matrix for pairwise distance
     cosine_dis = 1 - cosine.sum(dim=-1).squeeze()
     return cosine_dis
+

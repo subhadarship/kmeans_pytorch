@@ -35,7 +35,7 @@ def get_version():
 setup(
     name="kmeans_pytorch",
     version=get_version(),
-    author="Subhadarshi Panda",
+    author="Subhadarshi",
     author_email="subhadarshipanda08@gmail.com",
     description="",
     long_description=README,

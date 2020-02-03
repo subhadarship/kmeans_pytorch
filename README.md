@@ -41,7 +41,11 @@ cd kmeans_pytorch
 pip install --editable .
 ```
 
+# CPU vs GPU
+see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/master/cpu_vs_gpu.ipynb) for comparison between CPU and GPU
+
 # Notes
 - useful when clustering large number of samples
 - utilizes GPU for faster matrix computations
 - support euclidean and cosine distances (for now)
+
