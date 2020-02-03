@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+      <meta charset="UTF-8">
+        <title>
+          {% if page.title == "Home" %}
+            {{ site.title }} &middot; {{ site.tagline }}
+          {% else %}
+            {{ page.title }} &middot; {{ site.title }}
+          {% endif %}
+        </title>
+
+      <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+      <!--<meta name="description" content="{{ site.description }}">-->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="theme-color" content="#ffffff" />
+
+      <link rel="shortcut icon" href="{{ site.baseurl }}/static/favicon.ico">
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/css/variables.css">
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/css/general.css">
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/css/chrome.css">
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/css/print.css" media="print">
+
+      <!-- Fonts -->
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/FontAwesome/css/font-awesome.min.css">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+      <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+      <!-- Highlight.js Stylesheets -->
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/highlight.css">
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/tomorrow-night.css">
+      <link rel="stylesheet" href="{{ site.baseurl }}/static/ayu-highlight.css">
+	  
+	  <!-- Katex -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous" onload="render_katex()"></script>
+
+      <!-- To automatically render math in text elements, include the auto-render extension: -->
+      <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {delimiters: [
+                          {left: '$$', right: '$$', display: true},
+                          {left: '$', right: '$', display: false}
+          ]});"></script>
+    </head>
+
+  <body class="ayu">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">
+        var default_theme = "ayu";
+    </script>
+
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
+
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+            }
+
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
+
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+        if (theme === null || theme === undefined) { theme = default_theme; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
+
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
+
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents" aria-hidden="false">
+        <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+
+            {% comment %}
+            	The code below generates the sidebar according to some
+            	manually created table of contents in the _config.yml.
+            	We assume the pages are unique.
+            {% endcomment %}
+
+            <ol class="chapter">
+            {% assign base_url = site.baseurl | append: "/" %}
+            {% if page.url == base_url %}
+                <li><a class="active" href="{{ site.baseurl }}/">Home</a></li>
+            {% else %}
+                <li><a href="{{ site.baseurl }}/">Home</a></li>
+            {% endif %}
+
+            {% comment %}
+            	Hack to get a single element array...
+            {% endcomment %}
+			{% assign pagelist = base_url | split: 'DONOTSPLIT!#@$' %}
+            {% assign arraypath = base_url | split: 'DONOTSPLIT!#@$' %}
+		    {% assign pagelist = pagelist | concat: arraypath %}
+		    {% assign current_pagelist_index = pagelist | size %}
+
+            {% for chapter in site.chapters %}
+              {% assign node = site.pages | where: "path", chapter.path | first %}
+              {% assign arraypath = chapter.path | split: 'DONOTSPLIT!#@$' %}
+			  {% assign pagelist = pagelist | concat: arraypath %}
+			  {% assign chapteridx = forloop.index %}
+              {% if page.url == node.url %}
+                {% assign current_pagelist_index = pagelist | size %}
+                {% assign active = "active" %}
+              {% else %}
+                {% assign active = "" %}
+              {% endif %}
+              <li class="expanded "><a class="{{ active }}" href="{{ site.baseurl }}{{ node.url }}">
+                  <strong aria-hidden="true">{{ chapteridx }}.</strong> {{ node.title }}
+              </a></li>
+              {% if chapter.sections %}
+              	<ol class="section">
+                {% for section in chapter.sections %}
+                  {% assign snode = site.pages | where: "path", section.path | first %}
+                  {% assign arraypath = section.path | split: 'DONOTSPLIT!#@$' %}
+    			  {% assign pagelist = pagelist | concat: arraypath %}
+                  {% if page.url == snode.url %}
+                    {% assign current_pagelist_index = pagelist | size %}
+                    {% assign active = "active" %}
+                  {% else %}
+                    {% assign active = "" %}
+                  {% endif %}
+                  <li class="expanded "><a class="{{ active }}" href="{{ site.baseurl }}{{ snode.url }}">
+                      <strong aria-hidden="true">{{ chapteridx }}.{{ forloop.index }}.</strong> {{ snode.title }}
+                  </a></li>
+				{% endfor %}
+              	</ol>
+              {% endif %}
+            {% endfor %}
+
+            {% assign arraypath = pagelist | last | split: 'DONOTSPLIT!#@$' %}
+    		{% assign pagelist = pagelist | concat: arraypath %}
+
+            {% comment %}
+            	Now we can compute the next and previous page!
+            {% endcomment %}
+
+			{% assign prev_pagelist_index = current_pagelist_index | minus: 2 %}
+            {% assign page_next_path = pagelist[current_pagelist_index] %}
+            {% assign page_prev_path = pagelist[prev_pagelist_index] %}
+            {% assign page_next = site.pages | where: "path", page_next_path | first %}
+            {% assign page_prev = site.pages | where: "path", page_prev_path | first %}
+
+
+            <li><a href="{{ site.github.repo }}">GitHub project</a></li>
+            <!-- Here's some debug info: -->
+            <!--current_index: {{ current_pagelist_index }}-->
+            <!--next_page: {{ page_next_path }} -->
+            <!--previous_page: {{ page_prev_path }} -->
+            <!--the page list: {{ pagelist | jsonify }} -->
+
+            </ol>
+        </div>
+        <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+    </nav>
+
+    <div id="page-wrapper" class="page-wrapper">
+        <div class="page">
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                    </div>
+                    <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                        <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                        <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                        <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                        <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                        <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu (default)</button></li>
+                    </ul>
+
+                    <h1 class="menu-title">{{ site.title }}</h1>
+
+                    <div class="right-buttons">
+                        <a href="{{ site.git_repository_url}}" title="Git repository" aria-label="Git repository">
+                            <!-- <i id="git-repository-button" class="fa {{ site.git_repository_icon }}"></i> -->
+                            <i id="git-repository-button"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
+
+            <div id="content" class="content">
+                <main>
+                    <div class="page">
+                      <h1 class="page-title">{{ page.title }}</h1>
+                      {{ content }}
+                    </div>
+                </main>
+
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    <a rel="prev" href="{{ site.baseurl }}{{ page_prev.url }}" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="{{ site.baseurl }}{{ page_next.url }}" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
+        </div>
+
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                <a href="{{ site.baseurl }}{{ page_prev.url }}" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+
+                <a href="{{ site.baseurl }}{{ page_next.url }}" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+        </nav>
+
+    </div>
+
+    <script src="{{ site.baseurl }}/static/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ site.baseurl }}/static/highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ site.baseurl }}/static/book.js" type="text/javascript" charset="utf-8"></script>
+
+    <script>
+      function render_katex() {
+      $("script[type='math/tex']").replaceWith(function() {
+          var tex = $(this).text();
+          return katex.renderToString(tex, {displayMode: false});
+      });
+
+      $("script[type='math/tex; mode=display']").replaceWith(function() {
+          var tex = $(this).html();
+          return katex.renderToString(tex.replace(/%.*/g, ''), {displayMode: true});
+      });
+      };
+    </script>
+
+    </body>
+</html>
