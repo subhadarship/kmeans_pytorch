@@ -1,6 +1,8 @@
 ---
 layout: default
+title: Example
 ---
+
 
 ```python
 !pip install kmeans-pytorch
@@ -155,7 +157,7 @@ plt.show()
 ```
 
 
-![png](/static/img/example/output_10_0.png)
+![png]({{ site.baseurl }}/docs/static/img/example/output_10_0.png)
 
 
 
