@@ -1,7 +1,7 @@
 permalink:           pretty
 
 # Setup
-title:               'JekyllBook'
+title:               'kmeans PyTorch'
 #tagline:             'A Jekyll theme'
 url:                 https://subhadarship.github.io/kmeans_pytorch/
 baseurl:             '/kmeans_pytorch'
