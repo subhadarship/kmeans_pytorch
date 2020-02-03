@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # K Means using PyTorch
 PyTorch implementation of kmeans for utilizing GPU
 
