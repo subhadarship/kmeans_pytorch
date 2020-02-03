@@ -157,7 +157,7 @@ plt.show()
 ```
 
 
-![png](/static/img/example/output_10_0.png)
+![png](docs/static/img/example/output_10_0.png)
 
 
 
