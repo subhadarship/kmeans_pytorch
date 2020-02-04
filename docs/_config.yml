@@ -39,6 +39,6 @@ chapters:
 
 defaults:
   - scope:
-      path: "static/img"
+      path: "static/img/example"
     values:
       image: true
