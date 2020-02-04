@@ -5,7 +5,7 @@ title: K Means using PyTorch
 
 PyTorch implementation of kmeans for utilizing GPU
 
-![Alt Text](https://media.giphy.com/media/hcsoflVVr8gYE/giphy.gif)
+![Alt Text](https://media.giphy.com/media/WsYIwIHHXUcuiR8BeS/giphy.gif)
 
 # Getting Started
 ```
