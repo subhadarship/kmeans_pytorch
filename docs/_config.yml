@@ -33,12 +33,3 @@ kramdown:
 chapters:
   - path: chapters/example/example.md
   - path: chapters/cpu_vs_gpu/cpu_vs_gpu.md
-
-
-# defaults
-
-defaults:
-  - scope:
-      path: "static/img/example"
-    values:
-      image: true
