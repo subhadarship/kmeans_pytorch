@@ -157,7 +157,9 @@ plt.show()
 ```
 
 
-![png](docs/static/img/example/output_10_0.png)
+![png](/static/img/example/output_10_0.png)
+![png](/kmeans_pytorch/docs/static/img/example/output_10_0.png)
+![png]({{site.baseurl}}/docs/static/img/example/output_10_0.png)
 
 
 
