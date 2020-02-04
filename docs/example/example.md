@@ -157,7 +157,15 @@ plt.show()
 ```
 
 
-![png]({{ site.baseurl }}/static/img/example/output_10_0.png)
+![png](/static/img/example/output_10_0.png)
+![png](/kmeans_pytorch/docs/static/img/example/output_10_0.png)
+![png]({{site.baseurl}}/docs/static/img/example/output_10_0.png)
+![png]({{site.baseurl}}/static/img/example/output_10_0.png)
+
+![image](/static/img/example/output_10_0.png)
+![image](/kmeans_pytorch/docs/static/img/example/output_10_0.png)
+![image]({{site.baseurl}}/docs/static/img/example/output_10_0.png)
+![image]({{site.baseurl}}/static/img/example/output_10_0.png)
 
 
 
