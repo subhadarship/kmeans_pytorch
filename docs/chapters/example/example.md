@@ -1,3 +1,8 @@
+---
+layout: default
+title: Example
+---
+
 ## Installation
 Install easily using ```pip```
 
