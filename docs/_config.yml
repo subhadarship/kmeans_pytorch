@@ -9,7 +9,7 @@ baseurl:             '/kmeans_pytorch'
 # About/contact
 author:
   name:              Subhadarshi Panda
-  url:               subhadarship.github.io
+  url:               https://subhadarship.github.io
 github:
   repo:              https://github.com/subhadarship/kmeans_pytorch/
 
