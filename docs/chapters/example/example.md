@@ -156,13 +156,8 @@ plt.tight_layout()
 plt.show()
 ```
 
-
-![png](/static/img/example/output_10_0.png)
-![png](/kmeans_pytorch/docs/static/img/example/output_10_0.png)
-![png]({{site.baseurl}}/docs/static/img/example/output_10_0.png)
-
 ![png](output_10_0.png)
-![png](example/output_10_0.png)
+
 
 
 
