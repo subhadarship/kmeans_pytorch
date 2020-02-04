@@ -183,7 +183,7 @@ plt.show()
 ```
 
 
-![png](/static/img/cpu_vs_gpu/output_5_0.png)
+![png](output_5_0.png)
 
 
 
