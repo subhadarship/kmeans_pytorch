@@ -18,7 +18,7 @@ version:             0.3
 
 multilingual:        false
 src:                 "."
-default_theme:       "rust"
+default_theme:       "Rust"
 
 # For Maths
 markdown:            kramdown
