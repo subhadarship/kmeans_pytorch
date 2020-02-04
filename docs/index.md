@@ -5,7 +5,9 @@ title: K Means using PyTorch
 
 PyTorch implementation of kmeans for utilizing GPU
 
-## Getting Started
+![Alt Text](https://media.giphy.com/media/hcsoflVVr8gYE/giphy.gif)
+
+# Getting Started
 ```
 
 import torch
@@ -25,11 +27,11 @@ cluster_ids_x, cluster_centers = kmeans(
 
 see [`example.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/master/example.ipynb) for a more elaborate example
 
-## Requirements
+# Requirements
 * [PyTorch](http://pytorch.org/) version >= 1.0.0
 * Python version >= 3.6
 
-## Installation
+# Installation
 
 install with `pip`:
 ```
@@ -45,10 +47,10 @@ cd kmeans_pytorch
 pip install --editable .
 ```
 
-## CPU vs GPU
-see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/master/cpu_vs_gpu.ipynb) for comparison between CPU and GPU
+# CPU vs GPU
+see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/master/cpu_vs_gpu.ipynb) for a comparison between CPU and GPU
 
-## Notes
+# Notes
 - useful when clustering large number of samples
 - utilizes GPU for faster matrix computations
 - support euclidean and cosine distances (for now)
