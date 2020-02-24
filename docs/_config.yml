@@ -30,6 +30,7 @@ kramdown:
 
 # Chapter Configuration (up to a 2 level nested list)
 
-chapters:
+# chapters:
+prologues:
   - path: chapters/example/example.md
   - path: chapters/cpu_vs_gpu/cpu_vs_gpu.md
