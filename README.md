@@ -56,4 +56,4 @@ see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/mas
 - Documentation is done using the awesome theme [jekyllbook](https://github.com/ebetica/jekyllbook)
 
 # License
-[MIT](https://github.com/subhadarship/kmeans_pytorch/LICENSE)
+[MIT](https://github.com/subhadarship/kmeans_pytorch/blob/master/LICENSE)
