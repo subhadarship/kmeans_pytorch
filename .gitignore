@@ -16,3 +16,6 @@ var/
 *.eggs
 .mypy_cache/
 .vscode
+/.idea/
+/.ipynb_checkpoints
+/kmeans_pytorch/.ipynb_checkpoints
