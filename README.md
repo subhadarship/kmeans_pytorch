@@ -54,3 +54,6 @@ see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/mas
 # Credits
 - This implementation closely follows the style of [this](https://github.com/overshiki/kmeans_pytorch)
 - Documentation is done using the awesome theme [jekyllbook](https://github.com/ebetica/jekyllbook)
+
+# License
+[MIT](https://github.com/subhadarship/kmeans_pytorch/LICENSE)
