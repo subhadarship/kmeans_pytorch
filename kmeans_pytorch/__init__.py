@@ -24,6 +24,8 @@ def kmeans(
         distance='euclidean',
         cluster_centers = [],
         tol=1e-4,
+        tqdm_flag=True,
+        iter_limit=0,
         device=torch.device('cpu')
 ):
     """
@@ -33,6 +35,8 @@ def kmeans(
     :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
     :param tol: (float) threshold [default: 0.0001]
     :param device: (torch.device) device [default: cpu]
+    :param tqdm_flag: Allows to turn logs on and off
+    :param iter_limit: hard limit for max number of iterations
     :return: (torch.tensor, torch.tensor) cluster ids, cluster centers
     """
     print(f'running k-means on {device}..')
@@ -63,7 +67,8 @@ def kmeans(
         initial_state = initial_state.to(device)
         
     iteration = 0
-    tqdm_meter = tqdm(desc='[running kmeans]')
+    if tqdm_flag:
+        tqdm_meter = tqdm(desc='[running kmeans]')
     while True:
         
         dis = pairwise_distance_function(X, initial_state)
@@ -88,13 +93,16 @@ def kmeans(
         iteration = iteration + 1
 
         # update tqdm meter
-        tqdm_meter.set_postfix(
-            iteration=f'{iteration}',
-            center_shift=f'{center_shift ** 2:0.6f}',
-            tol=f'{tol:0.6f}'
-        )
-        tqdm_meter.update()
+        if tqdm_flag:
+            tqdm_meter.set_postfix(
+                iteration=f'{iteration}',
+                center_shift=f'{center_shift ** 2:0.6f}',
+                tol=f'{tol:0.6f}'
+            )
+            tqdm_meter.update()
         if center_shift ** 2 < tol:
+            break
+        if iter_limit != 0 and iteration >= iter_limit:
             break
 
     return choice_cluster.cpu(), initial_state.cpu()
