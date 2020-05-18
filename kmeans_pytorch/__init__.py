@@ -25,7 +25,7 @@ def kmeans(
         cluster_centers = [],
         tol=1e-4,
         tqdm_flag=True,
-        iter_limit=10000,
+        iter_limit=0,
         device=torch.device('cpu')
 ):
     """
@@ -102,7 +102,7 @@ def kmeans(
             tqdm_meter.update()
         if center_shift ** 2 < tol:
             break
-        if iteration > iter_limit:
+        if iter_limit != 0 and iteration >= iter_limit:
             break
 
     return choice_cluster.cpu(), initial_state.cpu()
