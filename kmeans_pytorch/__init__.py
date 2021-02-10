@@ -1,8 +1,10 @@
+from functools import partial
+
 import numpy as np
 import torch
 from tqdm import tqdm
 
-# ToDo: Can't choose a cluster if two points are too close to each other, that's where the nan come from
+from .soft_dtw_cuda import SoftDTW
 
 
 def initialize(X, num_clusters):
@@ -22,11 +24,12 @@ def kmeans(
         X,
         num_clusters,
         distance='euclidean',
-        cluster_centers = [],
+        cluster_centers=[],
         tol=1e-4,
         tqdm_flag=True,
         iter_limit=0,
-        device=torch.device('cpu')
+        device=torch.device('cpu'),
+        gamma_for_soft_dtw=0.001
 ):
     """
     perform kmeans
@@ -37,14 +40,18 @@ def kmeans(
     :param device: (torch.device) device [default: cpu]
     :param tqdm_flag: Allows to turn logs on and off
     :param iter_limit: hard limit for max number of iterations
+    :param gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
     :return: (torch.tensor, torch.tensor) cluster ids, cluster centers
     """
     print(f'running k-means on {device}..')
 
     if distance == 'euclidean':
-        pairwise_distance_function = pairwise_distance
+        pairwise_distance_function = partial(pairwise_distance, device=device)
     elif distance == 'cosine':
-        pairwise_distance_function = pairwise_cosine
+        pairwise_distance_function = partial(pairwise_cosine, device=device)
+    elif distance == 'soft_dtw':
+        sdtw = SoftDTW(use_cuda=device.type == 'cuda', gamma=gamma_for_soft_dtw)
+        pairwise_distance_function = partial(pairwise_soft_dtw, sdtw=sdtw, device=device)
     else:
         raise NotImplementedError
 
@@ -55,7 +62,7 @@ def kmeans(
     X = X.to(device)
 
     # initialize
-    if type(cluster_centers) == list: #ToDo: make this less annoyingly weird
+    if type(cluster_centers) == list:  # ToDo: make this less annoyingly weird
         initial_state = initialize(X, num_clusters)
     else:
         print('resuming')
@@ -65,12 +72,12 @@ def kmeans(
         choice_points = torch.argmin(dis, dim=0)
         initial_state = X[choice_points]
         initial_state = initial_state.to(device)
-        
+
     iteration = 0
     if tqdm_flag:
         tqdm_meter = tqdm(desc='[running kmeans]')
     while True:
-        
+
         dis = pairwise_distance_function(X, initial_state)
 
         choice_cluster = torch.argmin(dis, dim=1)
@@ -81,6 +88,10 @@ def kmeans(
             selected = torch.nonzero(choice_cluster == index).squeeze().to(device)
 
             selected = torch.index_select(X, 0, selected)
+
+            # https://github.com/subhadarship/kmeans_pytorch/issues/16
+            if selected.shape[0] == 0:
+                selected = X[torch.randint(len(X), (1,))]
 
             initial_state[index] = selected.mean(dim=0)
 
@@ -112,7 +123,8 @@ def kmeans_predict(
         X,
         cluster_centers,
         distance='euclidean',
-        device=torch.device('cpu')
+        device=torch.device('cpu'),
+        gamma_for_soft_dtw=0.001
 ):
     """
     predict using cluster centers
@@ -120,14 +132,18 @@ def kmeans_predict(
     :param cluster_centers: (torch.tensor) cluster centers
     :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
     :param device: (torch.device) device [default: 'cpu']
+    :param gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
     :return: (torch.tensor) cluster ids
     """
     print(f'predicting on {device}..')
 
     if distance == 'euclidean':
-        pairwise_distance_function = pairwise_distance
+        pairwise_distance_function = partial(pairwise_distance, device=device)
     elif distance == 'cosine':
-        pairwise_distance_function = pairwise_cosine
+        pairwise_distance_function = partial(pairwise_cosine, device=device)
+    elif distance == 'soft_dtw':
+        sdtw = SoftDTW(use_cuda=device.type == 'cuda', gamma=gamma_for_soft_dtw)
+        pairwise_distance_function = partial(pairwise_soft_dtw, sdtw=sdtw, device=device)
     else:
         raise NotImplementedError
 
@@ -144,6 +160,8 @@ def kmeans_predict(
 
 
 def pairwise_distance(data1, data2, device=torch.device('cpu')):
+    print(f'device is :{device}')
+    
     # transfer to device
     data1, data2 = data1.to(device), data2.to(device)
 
@@ -179,3 +197,29 @@ def pairwise_cosine(data1, data2, device=torch.device('cpu')):
     cosine_dis = 1 - cosine.sum(dim=-1).squeeze()
     return cosine_dis
 
+
+def pairwise_soft_dtw(data1, data2, sdtw=None, device=torch.device('cpu')):
+    if sdtw is None:
+        raise ValueError('sdtw is None - initialize it with SoftDTW')
+
+    # transfer to device
+    data1, data2 = data1.to(device), data2.to(device)
+
+    # (batch_size, seq_len, feature_dim=1)
+    A = data1.unsqueeze(dim=2)
+
+    # (cluster_size, seq_len, feature_dim=1)
+    B = data2.unsqueeze(dim=2)
+
+    distances = []
+    for b in B:
+        # (1, seq_len, 1)
+        b = b.unsqueeze(dim=0)
+        A, b = torch.broadcast_tensors(A, b)
+        # (batch_size, 1)
+        sdtw_distance = sdtw(b, A).view(-1, 1)
+        distances.append(sdtw_distance)
+
+    # (batch_size, cluster_size)
+    dis = torch.cat(distances, dim=1)
+    return dis
