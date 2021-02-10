@@ -82,6 +82,10 @@ def kmeans(
 
             selected = torch.index_select(X, 0, selected)
 
+            # https://github.com/subhadarship/kmeans_pytorch/issues/16
+            if selected.shape[0] == 0:
+                selected = X[torch.randint(len(X), (1,))]
+
             initial_state[index] = selected.mean(dim=0)
 
         center_shift = torch.sum(
