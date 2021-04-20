@@ -43,10 +43,11 @@ def kmeans(
     :param gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
     :return: (torch.tensor, torch.tensor) cluster ids, cluster centers
     """
-    print(f'running k-means on {device}..')
+    if tqdm_flag:
+        print(f'running k-means on {device}..')
 
     if distance == 'euclidean':
-        pairwise_distance_function = partial(pairwise_distance, device=device)
+        pairwise_distance_function = partial(pairwise_distance, device=device, tqdm_flag=tqdm_flag)
     elif distance == 'cosine':
         pairwise_distance_function = partial(pairwise_cosine, device=device)
     elif distance == 'soft_dtw':
@@ -65,7 +66,8 @@ def kmeans(
     if type(cluster_centers) == list:  # ToDo: make this less annoyingly weird
         initial_state = initialize(X, num_clusters)
     else:
-        print('resuming')
+        if tqdm_flag:
+            print('resuming')
         # find data point closest to the initial cluster center
         initial_state = cluster_centers
         dis = pairwise_distance_function(X, initial_state)
@@ -124,7 +126,8 @@ def kmeans_predict(
         cluster_centers,
         distance='euclidean',
         device=torch.device('cpu'),
-        gamma_for_soft_dtw=0.001
+        gamma_for_soft_dtw=0.001,
+        tqdm_flag=True
 ):
     """
     predict using cluster centers
@@ -135,10 +138,11 @@ def kmeans_predict(
     :param gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
     :return: (torch.tensor) cluster ids
     """
-    print(f'predicting on {device}..')
+    if tqdm_flag:
+        print(f'predicting on {device}..')
 
     if distance == 'euclidean':
-        pairwise_distance_function = partial(pairwise_distance, device=device)
+        pairwise_distance_function = partial(pairwise_distance, device=device, tqdm_flag=tqdm_flag)
     elif distance == 'cosine':
         pairwise_distance_function = partial(pairwise_cosine, device=device)
     elif distance == 'soft_dtw':
@@ -159,8 +163,9 @@ def kmeans_predict(
     return choice_cluster.cpu()
 
 
-def pairwise_distance(data1, data2, device=torch.device('cpu')):
-    print(f'device is :{device}')
+def pairwise_distance(data1, data2, device=torch.device('cpu'), tqdm_flag=True):
+    if tqdm_flag:
+        print(f'device is :{device}')
     
     # transfer to device
     data1, data2 = data1.to(device), data2.to(device)
