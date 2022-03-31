@@ -7,15 +7,19 @@ from tqdm import tqdm
 from .soft_dtw_cuda import SoftDTW
 
 
-def initialize(X, num_clusters):
+def initialize(X, num_clusters, seed):
     """
     initialize cluster centers
     :param X: (torch.tensor) matrix
     :param num_clusters: (int) number of clusters
+    :param seed: (int) seed for kmeans
     :return: (np.array) initial state
     """
     num_samples = len(X)
-    indices = np.random.choice(num_samples, num_clusters, replace=False)
+    if seed == None:
+        indices = np.random.choice(num_samples, num_clusters, replace=False)
+    else:
+        np.random.seed(seed) ; indices = np.random.choice(num_samples, num_clusters, replace=False)
     initial_state = X[indices]
     return initial_state
 
@@ -29,13 +33,15 @@ def kmeans(
         tqdm_flag=True,
         iter_limit=0,
         device=torch.device('cpu'),
-        gamma_for_soft_dtw=0.001
+        gamma_for_soft_dtw=0.001,
+        seed=None,
 ):
     """
     perform kmeans
     :param X: (torch.tensor) matrix
     :param num_clusters: (int) number of clusters
     :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
+    :param seed: (int) seed for kmeans
     :param tol: (float) threshold [default: 0.0001]
     :param device: (torch.device) device [default: cpu]
     :param tqdm_flag: Allows to turn logs on and off
@@ -64,7 +70,7 @@ def kmeans(
 
     # initialize
     if type(cluster_centers) == list:  # ToDo: make this less annoyingly weird
-        initial_state = initialize(X, num_clusters)
+        initial_state = initialize(X, num_clusters, seed=seed)
     else:
         if tqdm_flag:
             print('resuming')
