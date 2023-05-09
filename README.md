@@ -42,6 +42,7 @@ git clone https://github.com/subhadarship/kmeans_pytorch
 cd kmeans_pytorch
 pip install --editable .
 ```
+Installing from source requires 'numba' dependency.
 
 # CPU vs GPU
 see [`cpu_vs_gpu.ipynb`](https://github.com/subhadarship/kmeans_pytorch/blob/master/cpu_vs_gpu.ipynb) for a comparison between CPU and GPU

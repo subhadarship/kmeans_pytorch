@@ -101,7 +101,8 @@ def kmeans(
             if selected.shape[0] == 0:
                 selected = X[torch.randint(len(X), (1,))]
 
-            initial_state[index] = selected.mean(dim=0)
+            if torch.isnan(selected.mean(dim=0)).sum()==0:
+                initial_state[index] = selected.mean(dim=0)
 
         center_shift = torch.sum(
             torch.sqrt(
